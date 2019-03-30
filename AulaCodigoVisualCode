@@ -1,0 +1,61 @@
+#include <Arduino.h>
+#include <hcsr04.h>
+#include <MPU6050_tockn.h>
+#include <wire.h>
+
+const int led = 16;
+const int eSensor = 15;
+const int dSensor = 13;
+const int trigPin = 25;
+const int echoPin = 26;
+
+const int stepPinD = 12;
+const int dirPinD = 14;
+const int stepPinE = 0;
+const int dirPinE = 2;
+
+HCSR04 hcsr04(trigPin, echoPin, 20, 4000);
+MPU6050 mpu(Wire);
+
+void setup()
+{
+
+  pinMode(led, OUTPUT);
+  Serial.begin(9600);
+  Wire.begin(5, 4);
+  mpu.begin();
+
+  pinMode(stepPinD, OUTPUT);
+  pinMode(stepPinE, OUTPUT);
+  pinMode(dirPinD, OUTPUT);
+  pinMode(dirPinE, OUTPUT);
+}
+
+void loop()
+{
+  digitalWrite(dirPinD,HIGH);
+  digitalWrite(dirPinE,LOW);
+
+  for (int i = 0; i < 1600; i++)
+  {
+    digitalWrite(stepPinD, HIGH);
+    digitalWrite(stepPinE, HIGH);
+    delayMicroseconds(500);
+    digitalWrite(stepPinD, LOW);
+    digitalWrite(stepPinE, LOW);
+    delayMicroseconds(500);
+  }
+
+  digitalWrite(dirPinD,HIGH);
+  digitalWrite(dirPinE,HIGH);
+
+    for (int j = 0; j < 1100; j++)
+  {
+    digitalWrite(stepPinD, HIGH);
+    digitalWrite(stepPinE, HIGH);
+    delayMicroseconds(500);
+    digitalWrite(stepPinD, LOW);
+    digitalWrite(stepPinE, LOW);
+    delayMicroseconds(500);
+  }
+}
